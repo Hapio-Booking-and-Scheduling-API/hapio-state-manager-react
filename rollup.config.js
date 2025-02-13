@@ -16,13 +16,14 @@ export default {
             sourcemap: true,
         },
     ],
-    external: [
-        'date-fns',
-        'axios',
-        'zustand',
-        'zustand/middleware',
-        'lodash.merge',
-    ],
+    external: (id) => {
+        return (
+            /^date-fns(\/|$)/.test(id) ||
+            ['axios', 'zustand', 'zustand/middleware', 'lodash.merge'].includes(
+                id
+            )
+        );
+    },
     plugins: [
         typescript({
             tsconfig: './tsconfig.json',

@@ -10,19 +10,24 @@ import { getData, postData } from './helpers/Api';
 import { Dependencies, HapioBookingState, FullConfig } from './types';
 import merge from 'lodash.merge';
 
-const dependencies: Dependencies = { getData, postData };
+const dependencies: Dependencies = {
+    getData: (endpoint: string) =>
+        getData(useHapioBookingStore.getState().config, endpoint),
+    postData: (endpoint: string, data: any) =>
+        postData(useHapioBookingStore.getState().config, endpoint, data),
+};
 
 const useHapioBookingStore = create<HapioBookingState>()(
     devtools(
         persist(
-            (set, get, store) => {
+            (set, get, api) => {
                 return {
-                    ...createServicesSlice(dependencies)(set, get, store),
-                    ...createLocationsSlice(dependencies)(set, get, store),
-                    ...createResourcesSlice(dependencies)(set, get, store),
-                    ...createDateSlice(dependencies)(set, get, store),
-                    ...createTimeslotsSlice(dependencies)(set, get, store),
-                    ...createBookingSlice(dependencies)(set, get, store),
+                    ...createServicesSlice(dependencies)(set, get, api),
+                    ...createLocationsSlice(dependencies)(set, get, api),
+                    ...createResourcesSlice(dependencies)(set, get, api),
+                    ...createDateSlice(dependencies)(set, get, api),
+                    ...createTimeslotsSlice(dependencies)(set, get, api),
+                    ...createBookingSlice(dependencies)(set, get, api),
                     timestamp: Date.now(),
                     bookingCompleteTimestamp: null,
                     config: {} as FullConfig,
@@ -59,7 +64,7 @@ const useHapioBookingStore = create<HapioBookingState>()(
                 };
             },
             {
-                name: 'hapio-storage',
+                name: 'hapio-booking-store',
                 partialize: (state: HapioBookingState) => {
                     const { hapioApiToken, ...restConfig } = state.config;
                     return {
@@ -91,7 +96,6 @@ const useHapioBookingStore = create<HapioBookingState>()(
                     const defaultAfterBookingExpireTime =
                         customConfig.settings.afterBookingExipreTime;
 
-                    // Clear booking state if booking is older than expireTime
                     if (
                         state?.timestamp &&
                         defaultStoreExpireTime &&
@@ -110,7 +114,6 @@ const useHapioBookingStore = create<HapioBookingState>()(
                         };
                     }
 
-                    // Clear booking state if booking is older than afterBookingExpireTime
                     if (
                         state?.bookingCompleteTimestamp &&
                         defaultAfterBookingExpireTime &&
@@ -130,7 +133,6 @@ const useHapioBookingStore = create<HapioBookingState>()(
                         };
                     }
 
-                    // Merge persisted config with current default config so that customizations persist
                     const mergedConfig = state.config
                         ? merge({}, currentState.config, state.config)
                         : currentState.config;
@@ -142,10 +144,7 @@ const useHapioBookingStore = create<HapioBookingState>()(
                     };
                 },
             }
-        ),
-        {
-            name: 'hapio-booking-store',
-        }
+        )
     )
 );
 

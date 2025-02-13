@@ -1,13 +1,11 @@
 {
-    "name": "hapio-ui-state-management",
+    "name": "@hapio/hapio-ui-state-manager",
     "version": "1.0.0",
     "type": "module",
-    "description": "This README would normally document whatever steps are necessary to get your application up and running.",
     "main": "dist/hapio-ui-state-management.cjs.js",
     "module": "dist/hapio-ui-state-management.esm.js",
     "types": "dist/index.d.ts",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "build": "rollup -c",
         "prepare": "npm run build"
     },

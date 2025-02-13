@@ -177,7 +177,7 @@ export interface Content {
 
 export interface FullConfig {
     hapioApiToken: string;
-    hapioBaseURL?: string;
+    hapioBaseURL: string;
     settings: Settings;
     theme: Theme;
     content: Content;
