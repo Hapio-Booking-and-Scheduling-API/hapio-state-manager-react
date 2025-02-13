@@ -14,11 +14,11 @@ This project is a state manager built with [zustand](https://github.com/pmndrs/z
 Install package with your favorite package manager
 
 ```sh
-npm install hapio-state-manager-react
+npm install @hapio/hapio-state-manager-react
 ```
 
 ```sh
-yarn add hapio-state-manager-react
+yarn add @hapio/hapio-state-manager-react
 ```
 
 ## FAQ
