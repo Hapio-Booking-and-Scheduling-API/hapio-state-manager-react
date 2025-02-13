@@ -1,0 +1,42 @@
+{
+    "name": "hapio-ui-state-management",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "This README would normally document whatever steps are necessary to get your application up and running.",
+    "main": "dist/hapio-ui-state-management.cjs.js",
+    "module": "dist/hapio-ui-state-management.esm.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "rollup -c",
+        "prepare": "npm run build"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Hapio-Booking-and-Scheduling-API/hapio-state-manager-react.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Hapio-Booking-and-Scheduling-API/hapio-state-manager-react/issues"
+    },
+    "homepage": "https://github.com/Hapio-Booking-and-Scheduling-API/hapio-state-manager-react#readme",
+    "devDependencies": {
+        "@types/lodash.merge": "^4.6.9",
+        "@types/node": "^22.7.4",
+        "rollup": "^2.79.2",
+        "rollup-plugin-terser": "^7.0.2",
+        "rollup-plugin-typescript2": "^0.36.0",
+        "typescript": "^5.6.2"
+    },
+    "dependencies": {
+        "@rollup/plugin-json": "^6.1.0",
+        "@rollup/plugin-terser": "^0.4.4",
+        "axios": "^1.7.8",
+        "date-fns": "^4.1.0",
+        "lodash": "^4.17.21",
+        "lodash.merge": "^4.6.2",
+        "zustand": "^5.0.0-rc.2"
+    }
+}
