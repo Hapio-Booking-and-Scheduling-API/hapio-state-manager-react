@@ -1,6 +1,7 @@
 import { StateCreator } from 'zustand';
 import { DateState, HapioBookingState, Dependencies, Timeslot } from '../types';
-import { startOfDay, endOfDay, endOfMonth, format } from 'date-fns';
+import { startOfDay, endOfDay, endOfMonth } from 'date-fns';
+import { formatDateForAPI, buildApiUrl } from '../helpers/apiDateFormat';
 
 export const createDateSlice =
     (
@@ -31,25 +32,30 @@ export const createDateSlice =
                     ? startOfDay(currentMonth)
                     : startOfDay(new Date());
 
-                const from =
-                    format(baseDate, "yyyy-MM-dd'T'HH:mm:ss") + '-01:00';
+                const from = formatDateForAPI(baseDate);
 
                 const toDate = endOfMonth(baseDate);
-                const to =
-                    format(endOfDay(toDate), "yyyy-MM-dd'T'HH:mm:ss") +
-                    '-01:00';
+                const to = formatDateForAPI(endOfDay(toDate));
 
                 let page = 1;
                 let allDates: Timeslot[] = [];
                 let lastPage = 1;
 
                 do {
+                    const url = buildApiUrl(
+                        `/services/${serviceId}/bookable-slots`,
+                        {
+                            from,
+                            to,
+                            location: locationId,
+                            page,
+                        }
+                    );
+
                     const response = await dependencies.getData<{
                         data: Timeslot[];
                         meta: { last_page: number };
-                    }>(
-                        `/services/${serviceId}/bookable-slots?from=${from}&to=${to}&location=${locationId}&page=${page}`
-                    );
+                    }>(url);
 
                     allDates.push(...response.data);
                     set((state) => ({

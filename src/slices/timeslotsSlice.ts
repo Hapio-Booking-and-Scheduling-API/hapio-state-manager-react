@@ -1,11 +1,12 @@
 import { StateCreator } from 'zustand';
-import { formatISO, startOfDay, endOfDay } from 'date-fns';
+import { startOfDay, endOfDay } from 'date-fns';
 import {
     TimeslotsState,
     HapioBookingState,
     Dependencies,
     Timeslot,
 } from '../types';
+import { formatDateForAPI, buildApiUrl } from '../helpers/apiDateFormat';
 
 export const createTimeslotsSlice =
     (
@@ -36,15 +37,23 @@ export const createTimeslotsSlice =
                 const fromDate = startOfDay(new Date(selectedDate));
                 const toDate = endOfDay(new Date(selectedDate));
 
-                const encodedFromDate = encodeURIComponent(formatISO(fromDate));
-                const encodedToDate = encodeURIComponent(formatISO(toDate));
+                const from = formatDateForAPI(fromDate);
+                const to = formatDateForAPI(toDate);
 
                 try {
+                    const url = buildApiUrl(
+                        `/services/${selectedService.id}/bookable-slots`,
+                        {
+                            from,
+                            to,
+                            location: selectedLocation.id,
+                            resource: selectedResource.id,
+                        }
+                    );
+
                     const data = await dependencies.getData<{
                         data: Timeslot[];
-                    }>(
-                        `/services/${selectedService.id}/bookable-slots?from=${encodedFromDate}&to=${encodedToDate}&location=${selectedLocation.id}&resource=${selectedResource.id}`
-                    );
+                    }>(url);
 
                     const parsedTimeslots: Timeslot[] = data.data.map(
                         (ts: Timeslot) => ({
